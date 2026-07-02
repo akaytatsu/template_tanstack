@@ -1,0 +1,5 @@
+services:
+  app:
+    container_name: tanstack-start-template
+    stdin_open: true
+    tty: true

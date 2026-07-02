@@ -1,0 +1,319 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+    --radius: 0.5rem;
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-surface-dim text-on-surface antialiased font-inter;
+    font-size: 13px;
+    line-height: 1.5;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  @media (max-width: 767px) {
+    input,
+    select,
+    textarea {
+      font-size: 16px !important;
+    }
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-inter tracking-tight;
+    letter-spacing: -0.02em;
+  }
+
+  code,
+  .font-mono {
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(194, 198, 214, 0.2) transparent;
+  }
+
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: rgba(194, 198, 214, 0.18);
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(194, 198, 214, 0.3);
+  }
+
+  ::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+}
+
+@layer utilities {
+  .text-label-sm {
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .text-body-sm {
+    font-size: 0.8125rem;
+    font-weight: 400;
+    line-height: 1.5;
+  }
+
+  .text-title-sm {
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+
+  .text-display-sm {
+    font-size: 2.25rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  @media (max-width: 639px) {
+    .text-display-sm {
+      font-size: 1.625rem;
+    }
+  }
+
+  .text-code-sm {
+    font-size: 0.75rem;
+    font-weight: 400;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .gradient-primary {
+    background: linear-gradient(135deg, #adc6ff 0%, #4d8eff 100%);
+  }
+
+  .ghost-border {
+    border-color: rgba(194, 198, 214, 0.15);
+  }
+
+  .ghost-border-20 {
+    border-color: rgba(194, 198, 214, 0.2);
+  }
+
+  /* Rich text content styles */
+  .rich-text-content h2 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin: 1rem 0 0.5rem;
+  }
+
+  .rich-text-content h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 0.75rem 0 0.5rem;
+  }
+
+  .rich-text-content h4 {
+    font-size: 0.875rem;
+    font-weight: 600;
+    margin: 0.5rem 0 0.375rem;
+  }
+
+  .rich-text-content p {
+    margin: 0.5rem 0;
+  }
+
+  .rich-text-content ul,
+  .rich-text-content ol {
+    margin: 0.5rem 0;
+    padding-left: 1.5rem;
+  }
+
+  .rich-text-content li {
+    margin: 0.25rem 0;
+  }
+
+  .rich-text-content blockquote {
+    border-left: 3px solid #4d8eff;
+    margin: 0.5rem 0;
+    padding-left: 1rem;
+    color: #c2c6d6;
+  }
+
+  .rich-text-content img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 0.25rem;
+    margin: 0.5rem 0;
+  }
+
+  .rich-text-content strong {
+    font-weight: 600;
+  }
+
+  .rich-text-content em {
+    font-style: italic;
+  }
+
+  .rich-text-content code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8125rem;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 0.125rem 0.375rem;
+    border-radius: 0.25rem;
+  }
+
+  .rich-text-content a {
+    color: #adc6ff;
+    text-decoration: underline;
+  }
+
+  .rich-text-content pre {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(194, 198, 214, 0.15);
+    border-radius: 0.25rem;
+    padding: 0.75rem;
+    overflow-x: auto;
+    margin: 0.5rem 0;
+  }
+
+  .rich-text-content pre code {
+    background: none;
+    padding: 0;
+    font-size: 0.75rem;
+  }
+}
+
+/* TipTap Editor Styles */
+.ProseMirror {
+  outline: none;
+  min-height: 120px;
+}
+
+.ProseMirror p.is-editor-empty:first-child::before {
+  color: rgba(194, 198, 214, 0.5);
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
+
+.ProseMirror img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.25rem;
+  margin: 0.5rem 0;
+}
+
+.ProseMirror img.ProseMirror-selectednode {
+  outline: 2px solid #4d8eff;
+  outline-offset: 2px;
+}
+
+.ProseMirror ul,
+.ProseMirror ol {
+  padding-left: 1.5rem;
+}
+
+.ProseMirror li {
+  margin: 0.25rem 0;
+}
+
+.ProseMirror blockquote {
+  border-left: 3px solid #4d8eff;
+  padding-left: 1rem;
+  color: #c2c6d6;
+  margin: 0.5rem 0;
+}
+
+.ProseMirror h2 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin: 1rem 0 0.5rem;
+}
+
+.ProseMirror h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0.75rem 0 0.5rem;
+}
+
+.ProseMirror pre {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(194, 198, 214, 0.15);
+  border-radius: 0.25rem;
+  padding: 0.75rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  overflow-x: auto;
+  margin: 0.5rem 0;
+}
+
+.ProseMirror code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8125rem;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 0.125rem 0.375rem;
+  border-radius: 0.25rem;
+}
+
+.ProseMirror pre code {
+  background: none;
+  padding: 0;
+}
+
+.ProseMirror a {
+  color: #adc6ff;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.ProseMirror p {
+  margin: 0.25rem 0;
+}

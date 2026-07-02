@@ -1,0 +1,12 @@
+node_modules
+dist
+.output
+.nitro
+.tanstack
+coverage
+.git
+*.md
+.DS_Store
+.env
+.env.local
+.env.*.local
