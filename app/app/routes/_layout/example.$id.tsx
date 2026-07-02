@@ -1,7 +1,8 @@
 'use client'
 
-import React, { useState } from 'react'
 import { createFileRoute, useNavigate, Link } from '@tanstack/react-router'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { ArrowLeft, Trash2 } from 'lucide-react'
 import { toast } from 'sonner'
 import { useExample, useUpdateExample, useDeleteExample } from '@/lib/queries/example'
@@ -10,7 +11,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Spinner } from '@/components/ui/spinner'
-import type { Example, ExampleStatus } from '@/types/example'
+import { exampleFormSchema, type Example, type ExampleFormValues } from '@/types/example'
 
 export const Route = createFileRoute('/_layout/example/$id')({
   component: ExampleDetailPage,
@@ -38,7 +39,7 @@ function ExampleDetailPage() {
     )
   }
 
-  // Remount (and re-seed the form) whenever the loaded entity changes.
+  // Remount (and re-seed the form defaults) whenever the loaded entity changes.
   return <ExampleForm key={data.id} example={data} />
 }
 
@@ -47,15 +48,23 @@ function ExampleForm({ example }: { example: Example }) {
   const update = useUpdateExample(example.id)
   const remove = useDeleteExample()
 
-  // Seeded from props via the useState initializer — no effect needed.
-  const [title, setTitle] = useState(example.title)
-  const [description, setDescription] = useState(example.description)
-  const [status, setStatus] = useState<ExampleStatus>(example.status)
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<ExampleFormValues>({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    resolver: zodResolver(exampleFormSchema) as any,
+    defaultValues: {
+      title: example.title,
+      description: example.description,
+      status: example.status,
+    },
+  })
 
-  const handleSave = async (e: React.FormEvent) => {
-    e.preventDefault()
+  const onSubmit = async (data: ExampleFormValues) => {
     try {
-      await update.mutateAsync({ title, description, status })
+      await update.mutateAsync(data)
       toast.success('Saved')
     } catch {
       toast.error('Failed to save')
@@ -82,28 +91,23 @@ function ExampleForm({ example }: { example: Example }) {
         </Button>
       </div>
 
-      <form onSubmit={handleSave} className="space-y-4">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>
         <div className="space-y-1.5">
           <Label htmlFor="title">Title</Label>
-          <Input id="title" value={title} onChange={(e) => setTitle(e.target.value)} required />
+          <Input id="title" {...register('title')} />
+          {errors.title && <p className="text-body-sm text-k-error">{errors.title.message}</p>}
         </div>
 
         <div className="space-y-1.5">
           <Label htmlFor="description">Description</Label>
-          <Textarea
-            id="description"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            rows={5}
-          />
+          <Textarea id="description" rows={5} {...register('description')} />
         </div>
 
         <div className="space-y-1.5">
           <Label htmlFor="status">Status</Label>
           <select
             id="status"
-            value={status}
-            onChange={(e) => setStatus(e.target.value as ExampleStatus)}
+            {...register('status')}
             className="h-9 w-full rounded-sm border ghost-border bg-transparent px-3 text-body-sm text-on-surface"
           >
             <option value="draft">Draft</option>
@@ -112,8 +116,8 @@ function ExampleForm({ example }: { example: Example }) {
           </select>
         </div>
 
-        <Button type="submit" disabled={update.isPending}>
-          {update.isPending ? 'Saving…' : 'Save changes'}
+        <Button type="submit" disabled={isSubmitting}>
+          {isSubmitting ? 'Saving…' : 'Save changes'}
         </Button>
       </form>
     </div>

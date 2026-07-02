@@ -1,7 +1,10 @@
 'use client'
 
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { createFileRoute, useNavigate, useSearch, redirect } from '@tanstack/react-router'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { z } from 'zod'
 import { useAuth } from '@/lib/auth'
 import { isAuthenticated } from '@/lib/api'
 import { checkServerAuth } from '@/lib/server-fns'
@@ -10,6 +13,12 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Eye, EyeOff, ArrowRight, Boxes } from 'lucide-react'
+
+const loginSchema = z.object({
+  email: z.email('Enter a valid email'),
+  password: z.string().min(1, 'Password is required'),
+})
+type LoginForm = z.output<typeof loginSchema>
 
 export const Route = createFileRoute('/login')({
   component: LoginPage,
@@ -30,22 +39,26 @@ function LoginPage() {
   const { login } = useAuth()
   const navigate = useNavigate()
   const search = useSearch({ strict: false }) as { redirect?: string }
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState('')
+  const [authError, setAuthError] = useState('')
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setError('')
-    setIsLoading(true)
-    const ok = await login(email, password)
-    setIsLoading(false)
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<LoginForm>({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    resolver: zodResolver(loginSchema) as any,
+    defaultValues: { email: '', password: '' },
+  })
+
+  const onSubmit = async (data: LoginForm) => {
+    setAuthError('')
+    const ok = await login(data.email, data.password)
     if (ok) {
       navigate({ to: search.redirect || '/' })
     } else {
-      setError('Invalid email or password.')
+      setAuthError('Invalid email or password.')
     }
   }
 
@@ -59,17 +72,11 @@ function LoginPage() {
           <h1 className="text-title-sm text-on-surface">Sign in to {SITE.shortName}</h1>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>
           <div className="space-y-1.5">
             <Label htmlFor="email">Email</Label>
-            <Input
-              id="email"
-              type="email"
-              autoComplete="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
+            <Input id="email" type="email" autoComplete="email" {...register('email')} />
+            {errors.email && <p className="text-body-sm text-k-error">{errors.email.message}</p>}
           </div>
 
           <div className="space-y-1.5">
@@ -79,9 +86,7 @@ function LoginPage() {
                 id="password"
                 type={showPassword ? 'text' : 'password'}
                 autoComplete="current-password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
+                {...register('password')}
               />
               <button
                 type="button"
@@ -96,13 +101,16 @@ function LoginPage() {
                 )}
               </button>
             </div>
+            {errors.password && (
+              <p className="text-body-sm text-k-error">{errors.password.message}</p>
+            )}
           </div>
 
-          {error && <p className="text-body-sm text-k-error">{error}</p>}
+          {authError && <p className="text-body-sm text-k-error">{authError}</p>}
 
-          <Button type="submit" className="w-full" disabled={isLoading}>
-            {isLoading ? 'Signing in…' : 'Sign in'}
-            {!isLoading && <ArrowRight />}
+          <Button type="submit" className="w-full" disabled={isSubmitting}>
+            {isSubmitting ? 'Signing in…' : 'Sign in'}
+            {!isSubmitting && <ArrowRight />}
           </Button>
         </form>
       </div>

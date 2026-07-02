@@ -90,6 +90,8 @@ docker build -f app/Dockerfile app   # production image (SSR, non-root, healthch
   (guarded by `beforeLoad`). Entities are modeled as routes, not modals (list / `$id` / `new`).
 - **Data fetching** — TanStack Query with a **query-key factory** per entity
   (`src/lib/queries/example.ts`). Mutations invalidate through those keys.
+- **Forms** — `react-hook-form` + Zod (`zodResolver`), schema co-located with the entity
+  (`exampleFormSchema` in `src/types/example.ts`). Create/edit are dedicated routes, not modals.
 - **Auth** — JWT stored as an SSR cookie + client localStorage. A single 401 handler in the
   root `QueryCache`/`MutationCache` clears the session and redirects to `/login`.
 - **API** — `src/lib/api-client.ts` (client, uses `VITE_API_BASE_URL`) and

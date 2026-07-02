@@ -25,6 +25,10 @@ files are ops only (`Makefile`, `docker-compose*`, `build-and-push.sh`).
 - **Data fetching:** one file per entity under `src/lib/queries/` exposing a **query-key
   factory** (`entityKeys`) plus `use…` hooks. Mutations must invalidate via those keys
   (`qc.invalidateQueries({ queryKey: entityKeys.lists() })`). See `src/lib/queries/example.ts`.
+- **Forms:** `react-hook-form` + `zodResolver` (`@hookform/resolvers/zod`). Define the Zod
+  schema alongside the entity (e.g. `exampleFormSchema` in `types/example.ts`), `register`
+  fields, and show errors from `formState.errors`. Create/edit happen on dedicated routes,
+  never modals. See `app/routes/_layout/example.new.tsx` and `login.tsx`.
 - **API:** browser calls go through `src/lib/api-client.ts` (`api.get/post/put/delete`, uses
   `VITE_API_BASE_URL`); SSR/privileged calls use `createServerFn` in `src/lib/server-fns.ts`
   (uses `API_BASE_URL`). Never read `API_BASE_URL` on the client.
