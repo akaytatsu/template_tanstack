@@ -1,17 +1,31 @@
+# ============================================================================
+# Development Stage - Vite dev server (TanStack Start) com hot reload
+# (npm run dev). Também pode ser usado pela CI para rodar lint/build/testes.
+# ============================================================================
 FROM node:22-slim
 
 WORKDIR /app
 
+# Dependências de build (git p/ metadados de versão e módulos nativos).
 RUN apt-get update && apt-get install -y --no-install-recommends \
     git \
     && rm -rf /var/lib/apt/lists/*
 
+# Instala dependências a partir do lockfile (npm ci) numa camada separada,
+# aproveitando o cache do Docker enquanto package*.json não mudar. O scripts/
+# precisa vir antes porque o postinstall roda apply-router-plugin-patch.cjs.
 COPY package*.json ./
 COPY scripts/ scripts/
 RUN npm ci
 
+# Copia o código (necessário para a CI, que não usa volume).
+# Em dev local o docker-compose monta `./app:/app` por cima, habilitando hot
+# reload; o volume anônimo em /app/node_modules preserva o que foi instalado
+# aqui na imagem (o bind mount não o sobrescreve).
 COPY . .
 
+# Porta do Vite dev server
 EXPOSE 5173
 
+# `--host` faz o Vite ouvir em 0.0.0.0 (acessível a partir do host)
 CMD ["npm", "run", "dev", "--", "--host", "--port", "5173"]

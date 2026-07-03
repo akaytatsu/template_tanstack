@@ -76,7 +76,7 @@ docker build \
   --tag "${IMAGE_REF}:latest" \
   --build-arg "GIT_SHA=${REMOTE_SHA}" \
   --build-arg "BUILD_DATE=${BUILD_DATE}" \
-  --build-arg "VITE_API_BASE_URL=${VITE_API_BASE_URL:-https://api.example.com}" \
+  --build-arg "VITE_API_DOMAIN=${VITE_API_DOMAIN:-api.example.com}" \
   ./app
 
 echo "==> Push: ${IMAGE_REF}:${SHORT_SHA}"

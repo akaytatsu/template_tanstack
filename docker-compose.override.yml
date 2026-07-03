@@ -1,5 +1,25 @@
 services:
   app:
     container_name: tanstack-start-template
+    command: npm run dev -- --host --port 5173
     stdin_open: true
     tty: true
+    environment:
+      # Ativa polling do watcher (chokidar) p/ hot reload em bind mount (macOS)
+      - CHOKIDAR_USEPOLLING=true
+      # SSR roda DENTRO do container, então API_BASE_URL deve apontar para
+      # host.docker.internal:8080 (não localhost) para alcançar um backend no
+      # host. Já VITE_API_DOMAIN é o valor voltado ao navegador (browser-facing).
+      - API_BASE_URL=${API_BASE_URL:-http://host.docker.internal:8080}
+      - VITE_API_DOMAIN=${VITE_API_DOMAIN:-localhost:8080}
+    ports:
+      - 5173:5173
+    volumes:
+      # Código (pasta app/) montado do host → hot reload
+      - ./app:/app
+      # Volume anônimo preserva o node_modules instalado na imagem
+      - /app/node_modules
+    # Permite que o SSR dentro do container alcance um backend no host
+    # (inclusive no Linux, onde host.docker.internal não existe por padrão).
+    extra_hosts:
+      - "host.docker.internal:host-gateway"

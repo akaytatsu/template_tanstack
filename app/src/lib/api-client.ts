@@ -3,15 +3,19 @@ import { getToken } from './api'
 /**
  * Returns the base URL for the backend API.
  * On the server (SSR), reads from process.env.API_BASE_URL.
- * On the client, uses VITE_API_BASE_URL (import.meta.env) to construct the URL.
+ * On the client, builds the origin from VITE_API_DOMAIN (host only, e.g.
+ * "localhost:8080"), mirroring the current page protocol.
  */
 function getBaseUrl(): string {
   if (typeof window === 'undefined') {
     return process.env.API_BASE_URL || 'http://localhost:8080'
   }
 
-  // In browser, use VITE_API_BASE_URL from env (set in .env or Docker build-arg)
-  return import.meta.env.VITE_API_BASE_URL || ''
+  // In browser, build the origin from VITE_API_DOMAIN (set in .env or the Docker
+  // build-arg; inlined into the bundle at build time). The protocol mirrors the
+  // current page.
+  const domain = (import.meta.env.VITE_API_DOMAIN as string | undefined) || 'localhost:8080'
+  return `${window.location.protocol}//${domain}`
 }
 
 interface ApiResponse<T> {

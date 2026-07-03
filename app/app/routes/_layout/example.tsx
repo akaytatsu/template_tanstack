@@ -53,7 +53,7 @@ function ExampleListPage() {
           <CardHeader>
             <CardTitle>Could not load examples</CardTitle>
             <CardDescription>
-              Point <code className="text-code-sm">VITE_API_BASE_URL</code> at a backend that serves{' '}
+              Point <code className="text-code-sm">VITE_API_DOMAIN</code> at a backend that serves{' '}
               <code className="text-code-sm">/api/examples</code>, or edit{' '}
               <code className="text-code-sm">lib/queries/example.ts</code>.
             </CardDescription>

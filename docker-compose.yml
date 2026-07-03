@@ -1,12 +1,6 @@
 services:
   app:
     build:
+      # Contexto é ./app porque o projeto Node + Dockerfile-dev vivem lá.
       context: ./app
       dockerfile: Dockerfile-dev
-    ports:
-      - "5173:5173"
-    volumes:
-      - ./app:/app
-      - /app/node_modules
-    environment:
-      - NODE_ENV=development

@@ -45,7 +45,7 @@ The Vite project lives in `app/`; the repo root holds ops/deploy files (Docker c
 
 ```bash
 cd app
-cp .env.sample .env          # point API_BASE_URL / VITE_API_BASE_URL at your backend
+cp .env.sample .env          # point API_BASE_URL / VITE_API_DOMAIN at your backend
 npm install                  # postinstall applies the router-plugin HMR patch
 npm run dev                  # http://localhost:5173
 ```
@@ -94,9 +94,9 @@ docker build -f app/Dockerfile app   # production image (SSR, non-root, healthch
   (`exampleFormSchema` in `src/types/example.ts`). Create/edit are dedicated routes, not modals.
 - **Auth** — JWT stored as an SSR cookie + client localStorage. A single 401 handler in the
   root `QueryCache`/`MutationCache` clears the session and redirects to `/login`.
-- **API** — `src/lib/api-client.ts` (client, uses `VITE_API_BASE_URL`) and
+- **API** — `src/lib/api-client.ts` (client, builds the origin from `VITE_API_DOMAIN`) and
   `src/lib/server-fns.ts` (`createServerFn`, uses `API_BASE_URL`).
-- **Env vars** — `API_BASE_URL` (server-only) and `VITE_API_BASE_URL` (public).
+- **Env vars** — `API_BASE_URL` (server-only) and `VITE_API_DOMAIN` (public).
 - **Path alias** — `@/*` → `app/src/*`.
 
 ## Design system
