@@ -30,7 +30,8 @@ files are ops only (`Makefile`, `docker-compose*`, `build-and-push.sh`).
   fields, and show errors from `formState.errors`. Create/edit happen on dedicated routes,
   never modals. See `app/routes/_layout/example.new.tsx` and `login.tsx`.
 - **API:** browser calls go through `src/lib/api-client.ts` (`api.get/post/put/delete`, builds
-  the origin from `VITE_API_DOMAIN`); SSR/privileged calls use `createServerFn` in
+  the origin from `VITE_API_DOMAIN` — a bare host ⇒ `https://<host>`, or a full URL with scheme
+  used as-is; the page protocol is never used); SSR/privileged calls use `createServerFn` in
   `src/lib/server-fns.ts` (uses `API_BASE_URL`). Never read `API_BASE_URL` on the client.
 - **Auth:** `src/lib/auth.tsx` (`AuthProvider` / `useAuth` / `can`). 401s are handled once, in
   the root `QueryCache`/`MutationCache` (`app/app/routes/__root.tsx`) — don't scatter redirect logic.

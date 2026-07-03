@@ -4,14 +4,15 @@ services:
     command: npm run dev -- --host --port 5173
     stdin_open: true
     tty: true
+    # Config da API (API_BASE_URL p/ o SSR e VITE_API_DOMAIN p/ o navegador) vem
+    # do app/.env — não fixamos valores aqui. required:false não quebra o `up`
+    # quando o arquivo não existe (ex.: clone novo). Veja app/.env.sample.
+    env_file:
+      - path: ./app/.env
+        required: true
     environment:
       # Ativa polling do watcher (chokidar) p/ hot reload em bind mount (macOS)
       - CHOKIDAR_USEPOLLING=true
-      # SSR roda DENTRO do container, então API_BASE_URL deve apontar para
-      # host.docker.internal:8080 (não localhost) para alcançar um backend no
-      # host. Já VITE_API_DOMAIN é o valor voltado ao navegador (browser-facing).
-      - API_BASE_URL=${API_BASE_URL:-http://host.docker.internal:8080}
-      - VITE_API_DOMAIN=${VITE_API_DOMAIN:-localhost:8080}
     ports:
       - 5173:5173
     volumes:

@@ -3,19 +3,22 @@ import { getToken } from './api'
 /**
  * Returns the base URL for the backend API.
  * On the server (SSR), reads from process.env.API_BASE_URL.
- * On the client, builds the origin from VITE_API_DOMAIN (host only, e.g.
- * "localhost:8080"), mirroring the current page protocol.
+ * On the client, the origin comes entirely from VITE_API_DOMAIN: a bare host
+ * (e.g. "api.example.com") is assumed to be https, while a value that already
+ * carries a scheme (e.g. "http://localhost:8080") is used verbatim. The page
+ * protocol (window.location) is intentionally NOT used.
  */
 function getBaseUrl(): string {
   if (typeof window === 'undefined') {
     return process.env.API_BASE_URL || 'http://localhost:8080'
   }
 
-  // In browser, build the origin from VITE_API_DOMAIN (set in .env or the Docker
-  // build-arg; inlined into the bundle at build time). The protocol mirrors the
-  // current page.
-  const domain = (import.meta.env.VITE_API_DOMAIN as string | undefined) || 'localhost:8080'
-  return `${window.location.protocol}//${domain}`
+  // Browser: VITE_API_DOMAIN is inlined into the bundle at build time (or read
+  // from the dev-server env). The whole origin derives from it.
+  const domain = import.meta.env.VITE_API_DOMAIN as string | undefined
+  if (!domain) return 'http://localhost:8080'
+  const origin = /^https?:\/\//i.test(domain) ? domain : `https://${domain}`
+  return origin.replace(/\/+$/, '')
 }
 
 interface ApiResponse<T> {
