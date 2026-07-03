@@ -58,7 +58,7 @@ node scripts/rename-app.mjs acme-console "Acme Console" Acme
 ```
 
 This rewrites the identity tokens (`tanstack-start-template`, `TanStack Start Template`,
-short name `Template`) across `package.json`, `index.html`, the manifest, `src/lib/site.ts`,
+short name `Template`) across `package.json`, the manifest, `src/lib/site.ts`,
 the `Makefile`, `docker-compose.override.yml`, and `build-and-push.sh`. Review the diff and commit.
 
 ## Scripts (`app/`)

@@ -40,7 +40,6 @@ const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..')
 // Files that carry branding, relative to the repo root.
 const files = [
   'app/package.json',
-  'app/index.html',
   'app/public/manifest.webmanifest',
   'app/src/lib/site.ts',
   'Makefile',
