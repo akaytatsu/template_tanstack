@@ -2,7 +2,7 @@
 # Development Stage - Vite dev server (TanStack Start) com hot reload
 # (npm run dev). Também pode ser usado pela CI para rodar lint/build/testes.
 # ============================================================================
-FROM node:22-slim
+FROM node:22-slim@sha256:6c74791e557ce11fc957704f6d4fe134a7bc8d6f5ca4403205b2966bd488f6b3
 
 WORKDIR /app
 
@@ -26,6 +26,14 @@ COPY . .
 
 # Porta do Vite dev server
 EXPOSE 5173
+
+# Healthcheck simples — o Vite responde na raiz (retorna HTML)
+HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 \
+  CMD node -e "fetch('http://localhost:5173/').then(r => { process.exit(r.ok ? 0 : 1) }).catch(() => process.exit(1))"
+
+# NOTE: this container deliberately runs as root. Dev containers need root for
+# apt/git and for file permissions on bind-mounted volumes (especially macOS).
+# The production Dockerfile switches to a non-root user (nodeuser).
 
 # `--host` faz o Vite ouvir em 0.0.0.0 (acessível a partir do host)
 CMD ["npm", "run", "dev", "--", "--host", "--port", "5173"]

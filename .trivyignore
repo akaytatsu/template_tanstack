@@ -1,2 +1,8 @@
 # Trivy vulnerability IDs to ignore, one per line. Example:
 # CVE-2024-12345
+
+# Trivy misconfiguration IDs to ignore:
+# DS-0002: Dockerfile-dev intentionally runs as root — dev containers need root
+# for apt/git and bind-mount file permissions (especially macOS). The production
+# Dockerfile correctly switches to USER nodeuser.
+DS-0002

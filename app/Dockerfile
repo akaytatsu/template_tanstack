@@ -1,6 +1,6 @@
 # Multi-stage build for TanStack Start SSR
 # Pinned by digest for supply-chain integrity (tag: node:22-alpine)
-FROM node:22-alpine@sha256:9385cd9f3001dfc3431e8ead12c43e9e1f87cc1b9b5c6cfd0f73865d405b27c4 AS build
+FROM node:22-alpine@sha256:16e22a550f3863206a3f701448c45f7912c6896a62de43add43bb9c86130c3e2 AS build
 
 WORKDIR /app
 
@@ -29,7 +29,7 @@ COPY . .
 RUN npm run build
 
 # Server runtime — Node.js for SSR
-FROM node:22-alpine@sha256:9385cd9f3001dfc3431e8ead12c43e9e1f87cc1b9b5c6cfd0f73865d405b27c4 AS serve
+FROM node:22-alpine@sha256:16e22a550f3863206a3f701448c45f7912c6896a62de43add43bb9c86130c3e2 AS serve
 
 WORKDIR /app
 
