@@ -43,6 +43,9 @@ export default defineConfig({
   },
   server: {
     port: Number(process.env.PORT) || 5173,
+    // Dev environment (Dockerfile-dev / docker-compose) must accept connections
+    // from any host — the container binds 0.0.0.0 and requests arrive with the
+    // Docker host's IP/name. Do NOT restrict this to a host list.
     allowedHosts: true,
   },
   test: {

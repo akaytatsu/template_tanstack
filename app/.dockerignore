@@ -6,7 +6,16 @@ dist
 coverage
 .git
 *.md
+!README.md
 .DS_Store
 .env
 .env.local
 .env.*.local
+
+# Docker — not needed inside the image
+Dockerfile*
+.dockerignore
+
+# Logs
+*.log
+npm-debug.log*

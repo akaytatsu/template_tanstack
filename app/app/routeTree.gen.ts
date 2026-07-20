@@ -9,25 +9,25 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as LoginRouteImport } from './routes/login'
-import { Route as LayoutRouteImport } from './routes/_layout'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as LayoutRouteImport } from './routes/_layout'
+import { Route as LoginRouteImport } from './routes/login'
 import { Route as LayoutExampleRouteImport } from './routes/_layout/example'
-import { Route as LayoutExampleNewRouteImport } from './routes/_layout/example.new'
 import { Route as LayoutExampleIdRouteImport } from './routes/_layout/example.$id'
+import { Route as LayoutExampleNewRouteImport } from './routes/_layout/example.new'
 
-const LoginRoute = LoginRouteImport.update({
-  id: '/login',
-  path: '/login',
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LayoutRoute = LayoutRouteImport.update({
   id: '/_layout',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LayoutExampleRoute = LayoutExampleRouteImport.update({
@@ -35,14 +35,14 @@ const LayoutExampleRoute = LayoutExampleRouteImport.update({
   path: '/example',
   getParentRoute: () => LayoutRoute,
 } as any)
-const LayoutExampleNewRoute = LayoutExampleNewRouteImport.update({
-  id: '/new',
-  path: '/new',
-  getParentRoute: () => LayoutExampleRoute,
-} as any)
 const LayoutExampleIdRoute = LayoutExampleIdRouteImport.update({
   id: '/$id',
   path: '/$id',
+  getParentRoute: () => LayoutExampleRoute,
+} as any)
+const LayoutExampleNewRoute = LayoutExampleNewRouteImport.update({
+  id: '/new',
+  path: '/new',
   getParentRoute: () => LayoutExampleRoute,
 } as any)
 
@@ -92,11 +92,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/login': {
-      id: '/login'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof LoginRouteImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_layout': {
@@ -106,11 +106,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_layout/example': {
@@ -120,18 +120,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutExampleRouteImport
       parentRoute: typeof LayoutRoute
     }
-    '/_layout/example/new': {
-      id: '/_layout/example/new'
-      path: '/new'
-      fullPath: '/example/new'
-      preLoaderRoute: typeof LayoutExampleNewRouteImport
-      parentRoute: typeof LayoutExampleRoute
-    }
     '/_layout/example/$id': {
       id: '/_layout/example/$id'
       path: '/$id'
       fullPath: '/example/$id'
       preLoaderRoute: typeof LayoutExampleIdRouteImport
+      parentRoute: typeof LayoutExampleRoute
+    }
+    '/_layout/example/new': {
+      id: '/_layout/example/new'
+      path: '/new'
+      fullPath: '/example/new'
+      preLoaderRoute: typeof LayoutExampleNewRouteImport
       parentRoute: typeof LayoutExampleRoute
     }
   }

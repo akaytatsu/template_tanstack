@@ -33,6 +33,9 @@ app/.env.*.local
 .DS_Store
 *.local
 
+# TypeScript
+*.tsbuildinfo
+
 # Tooling
 .claude/
 
